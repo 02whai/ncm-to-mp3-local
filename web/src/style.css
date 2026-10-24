@@ -1,0 +1,83 @@
+@import url('./tokens.css');
+
+* {box-sizing:border-box;}
+html,body,#root {min-height:100%; margin:0;}
+body {background:var(--canvas); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased;}
+button,input {font:inherit;}
+button {cursor:pointer; border:0; -webkit-tap-highlight-color:transparent;}
+button:disabled {cursor:wait; opacity:.55;}
+button:focus-visible {outline:3px solid #b4a2f0; outline-offset:4px;}
+.page {min-height:100svh; display:grid; place-items:center; padding:32px 20px; background:radial-gradient(ellipse at 50% 30%,#fff 0%,transparent 70%);}
+.converter {width:560px; height:600px; max-width:100%; display:flex; flex-direction:column; padding:28px; border:1px solid #e4e4e9; background:#fbfbfd; border-radius:24px; box-shadow:0 2px 3px #17172002,0 18px 60px -26px #17172024; animation:arrive .45s var(--settle) both;}
+.app-header {display:flex; align-items:center; gap:12px; margin-bottom:26px; flex-shrink:0;}
+.app-mark {width:36px; height:36px; display:grid; place-items:center; color:#bca5ff; background:var(--ink); border-radius:10px; box-shadow:0 2px 5px #19191d13;}
+h1 {display:flex; align-items:center; gap:11px; margin:0; font-size:23px; font-weight:620; letter-spacing:-.7px;}
+h1>svg {color:#9c9ca6; stroke-width:1.6;}
+.drop-zone {--mx:50%; --my:50%; position:relative; flex-shrink:0; isolation:isolate; height:248px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #e2e2e9; border-radius:18px; background:#fff; overflow:hidden; transition:background .2s,border-color .2s,box-shadow .2s;}
+.drop-zone::before {position:absolute; z-index:-2; inset:0; content:""; opacity:0; background:radial-gradient(240px circle at var(--mx) var(--my),#9983ef14,transparent 80%); transition:opacity .3s;}
+.drop-zone::after {position:absolute; z-index:-1; inset:0; content:""; border-radius:inherit; pointer-events:none; padding:1px; background:radial-gradient(210px circle at var(--mx) var(--my),#a18cdd,transparent 70%); mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); mask-composite:exclude; opacity:0; transition:opacity .3s;}
+.drop-zone:hover::before,.drop-zone:hover::after {opacity:1;}
+.drop-zone.dragging {border-color:#a58bdc; background:#f6f3ff; box-shadow:0 0 0 4px #8a66d90b;}
+.drop-zone.dragging::before {opacity:1;}
+.drop-zone h2 {margin:13px 0 17px; font-size:17px; font-weight:560; letter-spacing:-.3px;}
+.file-fan {position:relative; width:150px; height:84px; margin-top:-5px;}
+.stack-card {position:absolute; left:calc(50% - 27px); top:9px; width:54px; height:67px; display:grid; place-items:center; border:1px solid #dedee7; border-radius:10px; background:#fff; color:#a3a3b1; box-shadow:0 4px 12px #20203008; transition:transform .55s var(--spring),color .2s;}
+.back-left {transform:translate(-22px,5px) rotate(-10deg); background:#fafafd;}
+.back-right {transform:translate(22px,5px) rotate(10deg); background:#fafafd;}
+.front {color:var(--accent); transform:translateY(-3px); box-shadow:0 5px 14px #2920390b;}
+.expanded .back-left {transform:translate(-37px,0) rotate(-19deg);}
+.expanded .back-right {transform:translate(37px,0) rotate(19deg);}
+.expanded .front {transform:translateY(-10px);}
+.choose-button {position:relative; display:flex; align-items:center; gap:7px; padding:10px 19px; border-radius:22px; color:#fff; background:var(--ink); font-size:13px; font-weight:520; transition:transform .25s var(--spring),background .2s,box-shadow .2s; box-shadow:0 2px 4px #19191d12;}
+.choose-button:hover {background:#302b3e; box-shadow:0 4px 12px #29203916; transform:translateY(-1px);}
+.choose-button:active {transform:translateY(0) scale(.95);}
+.file-input {position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;}
+.queue-heading {display:flex; flex-shrink:0; align-items:center; justify-content:space-between; gap:12px; margin:24px 0 9px; min-height:20px;}
+.queue-heading h2 {display:flex; align-items:center; gap:8px; margin:0; font-size:12px; font-weight:550; color:#888891;}
+.queue-heading h2>span {display:grid; place-items:center; padding:1px 5px; min-width:18px; border:1px solid #e4e4e9; border-radius:5px; font-size:10px; font-variant-numeric:tabular-nums; color:#92929b;}
+.queue-actions {display:flex; align-items:center; gap:14px; color:#8c8c96; font-size:12px;}
+.queue-actions button {padding:2px 0; color:#777780; background:none; font-size:12px; transition:color .18s;}
+.queue-actions button:hover {color:var(--accent);}
+.completed-count {font-variant-numeric:tabular-nums;}
+.queue {min-height:0; flex:1; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#d6d4dc transparent;}
+.empty-queue {height:100%; min-height:70px; display:grid; place-items:center; color:#ceced6;}
+.job {position:relative; display:flex; align-items:center; gap:12px; min-height:66px; padding:11px 2px; border-bottom:1px solid #eeeef2; animation:row-arrive .32s var(--settle) both;}
+.job:last-child {border-bottom:0;}
+.job-symbol {display:grid; flex-shrink:0; place-items:center; width:36px; height:40px; border:1px solid #eaeaf0; border-radius:9px; background:#fff; color:#a2a0ae; transition:background .25s,color .25s;}
+.completed .job-symbol {color:var(--accent); background:#f1edfa; border-color:transparent; animation:confirm .4s var(--spring);}
+.failed .job-symbol {background:#faf0f0; color:#bf686d; border-color:transparent;}
+.working .job-symbol {color:var(--accent);}
+.job-content {min-width:0; flex:1;}
+.job-filename {font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:20px;}
+.job-detail {font-size:11px; line-height:18px; color:#93929c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.failed .job-detail {color:#b26368;}
+.icon-button {display:grid; place-items:center; flex-shrink:0; width:32px; height:32px; color:#83818d; background:transparent; border-radius:8px; transition:color .18s,background .18s,transform .2s;}
+.icon-button:hover {color:var(--accent); background:#eeeaf8;}
+.icon-button:active {transform:scale(.9);}
+.spinner {animation:spin .85s linear infinite;}
+.progress-track {position:relative; height:2px; background:#eae5f4; border-radius:2px; margin-top:5px; overflow:hidden;}
+.progress-track>span {display:block; height:100%; background:#9d84d9; border-radius:inherit; transition:width .2s linear;}
+.indeterminate>span {width:35%; animation:scan 1.3s ease-in-out infinite;}
+.download-all {display:flex; flex-shrink:0; align-items:center; justify-content:center; gap:8px; padding:11px 16px; margin-top:13px; width:100%; border:1px solid #e3dcee; border-radius:10px; background:#f1edf8; color:#6c529e; font-size:12px; font-weight:550; transition:background .2s,transform .2s;}
+.download-all:hover {background:#eae3f5;}
+.download-all:active {transform:scale(.985);}
+.notice {display:flex; align-items:center; gap:8px; padding:10px 12px; margin-top:14px; border:1px solid #e9dfe3; background:#faf4f5; color:#a26372; border-radius:9px; font-size:12px; flex-shrink:0;}
+.notice>span {flex:1;}
+.notice button {display:grid; place-items:center; color:inherit; background:none; padding:2px;}
+.notice~.queue-heading {margin-top:14px;}
+@keyframes arrive {from {opacity:0; transform:translateY(9px) scale(.99);} to {opacity:1; transform:none;}}
+@keyframes row-arrive {from {opacity:0; transform:translateY(7px);} to {opacity:1; transform:none;}}
+@keyframes confirm {0% {transform:scale(.85);} 65% {transform:scale(1.06);} 100% {transform:scale(1);}}
+@keyframes spin {to {transform:rotate(360deg);}}
+@keyframes scan {from {transform:translateX(-110%);} to {transform:translateX(390%);}}
+@media(max-width:600px) {
+  .page {padding:20px 14px;}
+  .converter {padding:22px; width:100%; height:600px; max-height:calc(100svh - 40px); min-height:490px; border-radius:20px;}
+  .app-header {margin-bottom:22px;}
+  .drop-zone {height:224px;}
+  .queue-actions {gap:10px;}
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  .spinner {animation:spin 2s linear infinite !important;}
+}

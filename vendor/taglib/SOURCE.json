@@ -1,0 +1,7 @@
+{
+  "project": "taglib/taglib",
+  "version": "2.2.1",
+  "source": "https://github.com/taglib/taglib/releases/tag/v2.2.1",
+  "license": "MPL-1.1 OR LGPL-2.1-only",
+  "binary_sha256": "836439bbdefa98441ad63a94b3ddfcdc4eb9fccd5d266f60eab3f49408a9097a"
+}

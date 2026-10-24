@@ -1,0 +1,28 @@
+NCM 转 MP3 — browser edition
+
+This site uses the following open-source components. Audio files are processed in the browser.
+
+ncmdump-js 0.0.3 — MIT
+Source: https://github.com/ant-cave/ncmdump-js
+
+@ffmpeg/ffmpeg 0.12.15 — MIT
+@ffmpeg/core 0.12.10 — GPL-2.0-or-later
+Corresponding source and build scripts: https://github.com/ffmpegwasm/ffmpeg.wasm
+FFmpeg source: https://ffmpeg.org/download.html
+Licensing: https://ffmpeg.org/legal.html
+
+React / React DOM 19.3.1 — MIT
+https://github.com/facebook/react
+
+fflate 0.8.3 — MIT
+https://github.com/101arrowz/fflate
+
+Lucide 1.61.0 — ISC
+https://github.com/lucide-icons/lucide
+
+Vite 8.3.5 — MIT
+https://github.com/vitejs/vite
+
+UI inspiration (independent implementation):
+https://uimotion.fyi/docs/stacked-file-hover
+https://reactbits.dev/components/spotlight-card
