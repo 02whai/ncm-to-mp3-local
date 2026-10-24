@@ -276,10 +276,7 @@ final class ConversionEngine {
         try handle.synchronize()
         let output = try Data(contentsOf: log)
         guard child.terminationReason == .exit, child.terminationStatus == 0 else {
-            let details = String(decoding: output.suffix(1800), as: UTF8.self)
-                .replacingOccurrences(of: "\u{001B}\\[[0-9;]*m", with: "", options: .regularExpression)
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            throw ConversionError.message("\(executable.lastPathComponent) 未能完成处理。\(details.isEmpty ? "" : "\n" + details)")
+            throw ConversionError.message("音频处理失败，请检查文件是否完整后重试。")
         }
         return output
     }

@@ -31,11 +31,11 @@
 
 ## Python 候选的实际限制
 
-`ncmdump-py` 官方示例的 `NeteaseCloudMusicFile(path).decrypt().dump_music(path)` 能直接调用，但 `dump_music()` 按元数据中的原始格式决定扩展名，不承诺 MP3。`decrypt()` 固定调用 `_try_get_cover_data()`；缺封面时使用没有显式超时的 `urlopen()`，也没有公开的离线开关。此外顶层 `import imghdr` 与 Python 3.13+ 标准库不兼容，虽然包元数据仅声明 Python >=3.7。[Python 核心代码](https://github.com/ww-rm/ncmdump-py/blob/main/ncmdump/core.py)、[包清单](https://github.com/ww-rm/ncmdump-py/blob/main/pyproject.toml)、[Python 官方 imghdr 移除说明](https://docs.python.org/3/library/imghdr.html)
+`ncmdump-py` 提供可直接调用的 Python API，但 `dump_music()` 按元数据中的原始格式决定扩展名，不承诺 MP3。`decrypt()` 固定调用 `_try_get_cover_data()`；缺封面时使用没有显式超时的 `urlopen()`，也没有公开的离线开关。此外顶层 `import imghdr` 与 Python 3.13+ 标准库不兼容，虽然包元数据仅声明 Python >=3.7。[Python 核心代码](https://github.com/ww-rm/ncmdump-py/blob/main/ncmdump/core.py)、[包清单](https://github.com/ww-rm/ncmdump-py/blob/main/pyproject.toml)、[Python 官方 imghdr 移除说明](https://docs.python.org/3/library/imghdr.html)
 
 ## 另查到的替代
 
-- [taurusxin/ncmdump-go](https://git.taurusxin.com/taurusxin/ncmdump-go)：作者自己的 Go 移植，MIT，官方页面显示 1.7.5 发布于 2025-11-25；有 `ncmcrypt.NewNeteaseCloudMusic()`、`Dump()` 和 `FixMetadata(false)` API，最后一个参数可关闭远程封面获取。可以复用，但当前 macOS 小界面使用已有 C++ CLI 更省事。[官方 README](https://git.taurusxin.com/taurusxin/ncmdump-go)、[Go 核心源码](https://git.taurusxin.com/taurusxin/ncmdump-go/src/branch/main/ncmcrypt/ncmcrypt.go)、[LICENSE](https://git.taurusxin.com/taurusxin/ncmdump-go/src/branch/main/LICENSE)
+- [taurusxin/ncmdump-go](https://git.taurusxin.com/taurusxin/ncmdump-go)：作者自己的 Go 移植，MIT，官方页面显示 1.7.5 发布于 2025-11-25；提供文件读取、`Dump()` 和 `FixMetadata(false)` API，最后一个参数可关闭远程封面获取。可以复用，但当前 macOS 小界面使用已有 C++ CLI 更省事。[官方 README](https://git.taurusxin.com/taurusxin/ncmdump-go)、[Go 核心源码](https://git.taurusxin.com/taurusxin/ncmdump-go/src/branch/main/ncmcrypt/ncmcrypt.go)、[LICENSE](https://git.taurusxin.com/taurusxin/ncmdump-go/src/branch/main/LICENSE)
 - [lkhsss/ncmmiao](https://github.com/lkhsss/ncmmiao)：更新更近期的 Rust 项目，crates.io 的 3.14.0 发布于 2026-09-01，声明 GPL-3.0-or-later；公开库 API 包含取消及进度信号。因当前方案已可直接利用体积很小的 C++ CLI，这里不继续扩展选型。[crates.io 一手元数据](https://crates.io/api/v1/crates/ncmmiao)、[公开库文档](https://docs.rs/ncmmiao/3.14.0/ncmmiao/)
 
 实际兼容范围仍需用用户手头 NCM 样本验证；以上是源代码与发布信息核对，并非真实音乐样本的验收结论。

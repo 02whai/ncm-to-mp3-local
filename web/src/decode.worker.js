@@ -2,9 +2,15 @@ import {dump, parseNcm} from 'ncmdump-js';
 import {validateNcm, isMp3} from './ncm-input.js';
 
 self.onmessage = async ({data}) => {
+  let bytes;
   try {
-    const bytes = new Uint8Array(data.bytes);
+    bytes = new Uint8Array(data.bytes);
     validateNcm(bytes);
+  } catch (error) {
+    self.postMessage({error:error?.message || 'NCM 文件不完整'});
+    return;
+  }
+  try {
     const parsed = parseNcm(bytes);
     const mp3 = isMp3(parsed.audio);
     const flac = parsed.audio[0] === 0x66 && parsed.audio[1] === 0x4c && parsed.audio[2] === 0x61 && parsed.audio[3] === 0x43;
@@ -18,7 +24,7 @@ self.onmessage = async ({data}) => {
       buffer = await result.blob.arrayBuffer();
     }
     self.postMessage({bytes:buffer, format:mp3 ? 'mp3' : 'flac'}, [buffer]);
-  } catch (error) {
-    self.postMessage({error:error?.message || '无法读取此 NCM 文件'});
+  } catch {
+    self.postMessage({error:'无法读取此 NCM 文件，请检查文件是否完整'});
   }
 };

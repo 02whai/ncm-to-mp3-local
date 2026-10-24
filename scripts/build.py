@@ -103,16 +103,16 @@ def main():
     info = {
         "CFBundleName": "NCM 转 MP3", "CFBundleDisplayName": "NCM 转 MP3",
         "CFBundleExecutable": "NCMConverter", "CFBundleIdentifier": "local.ncm2mp3.desktop",
-        "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "1.1.0", "CFBundleVersion": "2",
+        "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "1.1.1", "CFBundleVersion": "3",
         "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "13.0",
         "LSApplicationCategoryType": "public.app-category.music", "NSHighResolutionCapable": True,
         "CFBundleDevelopmentRegion": "zh_CN",
         "CFBundleDocumentTypes": [{
-            "CFBundleTypeName": "网易云 NCM 音频", "CFBundleTypeRole": "Viewer", "LSHandlerRank": "Alternate",
-            "LSItemContentTypes": ["com.netease.ncm"], "CFBundleTypeExtensions": ["ncm"],
+            "CFBundleTypeName": "NCM 音频", "CFBundleTypeRole": "Viewer", "LSHandlerRank": "Alternate",
+            "LSItemContentTypes": ["local.ncm2mp3.audio"], "CFBundleTypeExtensions": ["ncm"],
         }],
         "UTImportedTypeDeclarations": [{
-            "UTTypeIdentifier": "com.netease.ncm", "UTTypeDescription": "网易云 NCM 音频",
+            "UTTypeIdentifier": "local.ncm2mp3.audio", "UTTypeDescription": "NCM 音频",
             "UTTypeConformsTo": ["public.data"], "UTTypeTagSpecification": {"public.filename-extension": ["ncm"]},
         }],
     }

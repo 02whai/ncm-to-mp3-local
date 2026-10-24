@@ -19,6 +19,8 @@ FFMPEG = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
 FFPROBE = shutil.which("ffprobe") or "/opt/homebrew/bin/ffprobe"
 CORE = bytes.fromhex("687a4852416d736f356b496e62617857")
 META = bytes.fromhex("2331346c6a6b5f215c5d2630553c2728")
+KEY_PREFIX = bytes.fromhex("6e657465617365636c6f75646d75736963")
+METADATA_PREFIX = bytes.fromhex("313633206b657928446f6e2774206d6f64696679293a")
 
 
 def command(*arguments, **kwargs):
@@ -40,12 +42,12 @@ def encrypt(key, data):
 def ncm_container(audio, audio_format, cover=True):
     """A test-only container encoder, independent of the app's third-party decoder."""
     key = b"locally-generated-test-stream-key"
-    encrypted_key = bytes(byte ^ 0x64 for byte in encrypt(CORE, b"neteasecloudmusic" + key))
+    encrypted_key = bytes(byte ^ 0x64 for byte in encrypt(CORE, KEY_PREFIX + key))
     metadata = {
         "musicName": "合成测试音频", "artist": [["测试歌手", 1]], "album": "测试专辑",
         "format": audio_format, "bitrate": 320000, "duration": 1250, "albumPic": "",
     }
-    encoded_meta = b"163 key(Don't modify):" + base64.b64encode(encrypt(META, b"music:" + json.dumps(metadata, ensure_ascii=False).encode()))
+    encoded_meta = METADATA_PREFIX + base64.b64encode(encrypt(META, b"music:" + json.dumps(metadata, ensure_ascii=False).encode()))
     encoded_meta = bytes(byte ^ 0x63 for byte in encoded_meta)
     box = list(range(256))
     last = key_index = 0
